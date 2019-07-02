@@ -9,6 +9,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+//Middleware
+const auth = require("../middleware/auth");
+
 
 //POST:Submitting some data/adding contact
 //GET:Fetch/getting data
@@ -19,7 +22,16 @@ const config = require('config');
 // @ route      GET api/auth
 // @desc        Get a logged in user
 // @access      Private
-router.get("/", (req, res) => {
+//Anything we need to protect a route, we just need to use our middleware...
+//We EXLUDE the password
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
   res.send("Got a  user");
 }); //Note that "/" here refers to the prefix of "api/users" + "/"
 
