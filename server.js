@@ -7,6 +7,9 @@ const app = express();
 //Connect the database
 connectDB();
 
+//Init middleware
+app.use(express.json({ extended: false })); //Now we can accept body data
+
 //An endpoint to hit. Form of: app.ACTION(verb).
 app.get("/", (req, res) =>
   res.json({ msg: "Welcome to the contact keeper API" })
