@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router(); //Get express' router
 const User = require("../models/User");
 const { check, validationResult } = require("express-validator/check");
+const bcrypt = require("bcryptjs");
 //POST:Submitting some data/adding contact
 //GET:Fetch/getting data
 //PUT: Update something
@@ -25,13 +26,39 @@ router.post(
       "Please enter a password with 6 or more characters"
     ).isLength({ min: 6 })
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     //If the requirements were NOT met
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() }); //Send a error code and an array of the errors
     }
-    res.send("Passed");
+    //Pull out the data
+    const { name, email, password } = req.body;
+
+    //Check to see if there is a user with that email
+    try {
+      let user = await User.findOne({ email }); //Go though the MongoDB and see if the email is already registered
+      if (user) {
+        return res.status(400).json({ msg: "User email already in use!" });
+      }
+      //User the user model to make a new user
+
+      user = new User({
+        name: name,
+        email: email,
+        password: password
+      });
+
+      //Use bcrypt for password encryption, returns a promise
+      const salt = await bcrypt.genSalt(10); //The salt is needed for encryption, higher #rounds=more secure
+      user.password = await bcrypt.hash(password, salt); //Gives us a hashed version of the password
+      //Save it in the db
+      await user.save();
+      res.send("user saved");
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("SERVER ERROR");
+    }
   }
 ); //Note that "/" here refers to the prefix of "api/users" + "/"
 
