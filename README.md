@@ -2,7 +2,7 @@
 
 Contact Keeper is an in-development project using the MERN (MongoDB,Express,React,NodeJS) stack.
 
-## Disreagrd the following readme template below :)
+## Disregard the following readme template below :)
 
 ## Getting Started(Coming Soon)
 
