@@ -9,9 +9,7 @@ const Contact = require("../models/Contact");
 //GET:Fetch/getting data
 //PUT: Update something
 //DELETE: Remove something
-
 //Registering user--> Use a put req
-
 // @ route      GET api/contacts
 // @desc        Get all that users' contacts
 // @access      Private (you need to be logged in to do this)
@@ -85,7 +83,6 @@ router.put("/:id", auth, async (req, res) => {
   if (email) contactFields.email = email;
   if (phone) contactFields.phone = phone;
   if (type) contactFields.type = type;
-  console.log("Im here");
   try {
     //Find the contact by id
     let contact = await Contact.findById(req.params.id);
@@ -112,7 +109,6 @@ router.put("/:id", auth, async (req, res) => {
 // @desc        Delete a contact
 // @access      Private
 router.delete("/:id", auth, async (req, res) => {
-  console.log("Im here");
   try {
     //Find the contact by id
     let contact = await Contact.findById(req.params.id);
