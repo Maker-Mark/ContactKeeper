@@ -19,8 +19,9 @@ const ContactState = props => {
       {
         id: 1,
         name: "Bob Markly",
+        email: "Jush@gmai.com",
         phone: "123-322-3332",
-        type: "personal"
+        type: "professional"
       },
       {
         id: 2,
@@ -37,11 +38,19 @@ const ContactState = props => {
     ]
   };
 
+  //useReducer takes any reducer and an initail state. We assign our state with the init state, giving our hard coded contacts over.
   const [state, dispatch] = useReducer(contactReducer, initState);
 
   //Add contact --CRUD--
+  const addContact = contact => {
+    contact.id = uuid.v4();
+    dispatch({ type: ADD_CONTACT, payload: contact });
+  };
 
   //Delete contact
+  const deleteContact = id => {
+    dispatch({ type: DELETE_CONTACT, payload: id });
+  };
 
   //Set current contact
 
@@ -55,9 +64,10 @@ const ContactState = props => {
 
   //Return the provider so we can wrap our app with this context to get this state
   return (
-    <ContactContext.Provider>
-      {/* Anything we want to acess from other comoponts liek stata nad actions go here(value) */}
-      value={{ contacts: state.contacts }}
+    <ContactContext.Provider
+      value={{ contacts: state.contacts, addContact, deleteContact }}
+    >
+      {/* Anything we want to acess from other comoponts lik3 stat and actions go here(value) */}
       {props.children}
     </ContactContext.Provider>
   );
