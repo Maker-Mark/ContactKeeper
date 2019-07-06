@@ -35,7 +35,11 @@ const ContactState = props => {
         phone: "434-44-2456",
         type: "personal"
       }
-    ]
+    ],
+    //We'll use current as a placeholder for editing contacts
+    current: null,
+    //An array of filtered contacts that match the filter
+    filtered: null
   };
 
   //useReducer takes any reducer and an initail state. We assign our state with the init state, giving our hard coded contacts over.
@@ -53,19 +57,42 @@ const ContactState = props => {
   };
 
   //Set current contact
-
+  const setCurrent = contact => {
+    dispatch({ type: SET_CURRENT, payload: contact });
+  };
   //Clear current contact
-
+  const clearCurrent = () => {
+    dispatch({ type: CLEAR_CURRENT });
+  };
   //Update contact
+  const updateContact = contact => {
+    dispatch({ type: UPDATE_CONTACT, payload: contact });
+  };
 
   //Filter contacts
-
+  const filterContacts = text => {
+    dispatch({ type: FILTER_CONTACTS, payload: text });
+  };
   //Clear filter
-
+  const clearFilter = () => {
+    dispatch({ type: CLEAR_FILTER });
+  };
   //Return the provider so we can wrap our app with this context to get this state
   return (
+    //We add things here to our providor so that we can acces them whenever/wherever we bring in the contactContext
     <ContactContext.Provider
-      value={{ contacts: state.contacts, addContact, deleteContact }}
+      value={{
+        contacts: state.contacts,
+        current: state.current,
+        filtered: state.filtered,
+        addContact,
+        deleteContact,
+        setCurrent,
+        clearCurrent,
+        updateContact,
+        filterContacts,
+        clearFilter
+      }}
     >
       {/* Anything we want to acess from other comoponts lik3 stat and actions go here(value) */}
       {props.children}

@@ -15,6 +15,13 @@ export default (state, action) => {
         ...state,
         contacts: [...state.contacts, action.payload]
       };
+    case UPDATE_CONTACT:
+      return {
+        ...state, //If they match now that contact is equal to the patlaod, aka the updated contact.
+        contacts: state.contacts.map(contact =>
+          contact.id === action.payload.id ? action.payload : contact
+        )
+      };
     case DELETE_CONTACT:
       return {
         ...state,
@@ -22,6 +29,34 @@ export default (state, action) => {
           contact => contact.id !== action.payload
         )
       };
+    case SET_CURRENT:
+      return {
+        //Current state
+        ...state,
+        //Set current to the contact we sent in by calling setCurrent from ContactState
+        current: action.payload
+      };
+    case FILTER_CONTACTS:
+      return {
+        ...state, //For each contact, set the regext to the payload/text. GI= Global insensative(we dont care about case)
+        filtered: state.contacts.filter(contact => {
+          console.log(contact);
+          const regex = new RegExp(action.payload, "gi");
+          return contact.name.match(regex); //Return anything where the name or email matches the text || contact.email.match(regex)
+        })
+      };
+
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        current: null
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        current: null
+      };
+
     default:
       return state;
   }
