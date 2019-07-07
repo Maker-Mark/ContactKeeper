@@ -28,7 +28,6 @@ router.get("/", auth, async (req, res) => {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
-  res.send("Got a  user");
 }); //Note that "/" here refers to the prefix of "api/users" + "/"
 
 //We can have the same request paths for two different methods!

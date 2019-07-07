@@ -1,8 +1,25 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AlertContext from "../../context/alert/alertContext";
-const Register = () => {
+import AuthContext from "../../context/auth/authContext";
+
+const Register = props => {
   const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
   const { setAlert } = alertContext;
+  const { register, error, clearErrors, isAuthenticated } = authContext;
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     props.history.push("/"); //Redirect to home
+  //   }
+
+  //   //Check the register error
+  //   if (error) {
+  //     setAlert(error, "danger");
+  //     clearErrors();
+  //   }
+  //   // eslint-disable-next-line
+  // }, [error, isAuthenticated, props.history]);
 
   const [user, setUser] = useState({
     name: "",
@@ -14,6 +31,7 @@ const Register = () => {
   const { name, email, password, password1 } = user;
 
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  //Error checking
   const onSubmit = e => {
     e.preventDefault();
     if (name === "" || email === "" || password === "") {
@@ -21,7 +39,11 @@ const Register = () => {
     } else if (password !== password1) {
       setAlert("Passwords do not match", "danger");
     } else {
-      console.log("Registered User");
+      register({
+        name,
+        email,
+        password
+      });
     }
   };
   return (

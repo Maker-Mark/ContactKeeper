@@ -10,6 +10,12 @@ import AuthState from "./context/auth/AuthState";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import AlertState from "./context/alert/AlertState";
+import setAuthToken from "./utils/setAuthToken";
+
+//Makesure we have the token
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
   return (

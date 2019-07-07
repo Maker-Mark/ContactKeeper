@@ -1,13 +1,10 @@
 const express = require("express");
 const router = express.Router(); //Get express' router
 const User = require("../models/User");
-const {
-  check,
-  validationResult
-} = require("express-validator/check");
+const { check, validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-const config = require('config');
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 //POST:Submitting some data/adding contact
 //GET:Fetch/getting data
@@ -24,8 +21,8 @@ router.post(
   "/",
   [
     check("name", "Please add a name")
-    .not()
-    .isEmpty(),
+      .not()
+      .isEmpty(),
     check("email", "Please include a valid email").isEmail(),
     check(
       "password",
@@ -43,20 +40,13 @@ router.post(
       }); //Send a error code and an array of the errors
     }
     //Pull out the data
-    const {
-      name,
-      email,
-      password
-    } = req.body;
+    const { name, email, password } = req.body;
     console.log(email);
     //Check to see if there is a user with that email
     try {
-      console.log("2I made it!");
       let user = await User.findOne({
         email
       }); //Go though the MongoDB and see if the email is already registered
-      console.log("3I made it!");
-
       if (user) {
         return res.status(400).json({
           msg: "User email already in use!"
@@ -85,17 +75,22 @@ router.post(
         user: {
           id: user.id
         }
-      }
+      };
       //jwt takes: Sign, payload, options, and a call back
       //When it expires they'll have to log back in
-      jwt.sign(payload, config.get("jwtSecret"), {
-        expiresIn: 46000
-      }, (err, token) => {
-        if (err) throw err;
-        res.json({
-          token
-        });
-      });
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        {
+          expiresIn: 46000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({
+            token
+          });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send("SERVER ERROR");
