@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import uuid from "uuid";
+import axios from "axios";
 import ContactContext from "./contactContext";
 import contactReducer from "./contactReducer";
 import {
@@ -9,46 +10,47 @@ import {
   CLEAR_CURRENT,
   UPDATE_CONTACT,
   FILTER_CONTACTS,
-  CLEAR_FILTER
+  CLEAR_FILTER,
+  CONTACT_ERROR,
+  GET_CONTACTS,
+  CLEAR_CONTACTS
 } from "../types";
 
 const ContactState = props => {
   //Hard coded contacts for testing
   const initState = {
-    contacts: [
-      {
-        id: 1,
-        name: "Bob Markly",
-        email: "Jush@gmai.com",
-        phone: "123-322-3332",
-        type: "professional"
-      },
-      {
-        id: 2,
-        name: "Alex Goldman",
-        phone: "543-254-3645",
-        type: "personal"
-      },
-      {
-        id: 3,
-        name: "Jake Jonson",
-        phone: "434-44-2456",
-        type: "personal"
-      }
-    ],
+    contacts: [],
     //We'll use current as a placeholder for editing contacts
     current: null,
     //An array of filtered contacts that match the filter
-    filtered: null
+    filtered: null,
+    error: null
   };
 
   //useReducer takes any reducer and an initail state. We assign our state with the init state, giving our hard coded contacts over.
   const [state, dispatch] = useReducer(contactReducer, initState);
 
+  const getContacts = async () => {
+    try {
+      const res = await axios.get("/api/contacts");
+      dispatch({ type: GET_CONTACTS, payload: res.data });
+    } catch (err) {
+      dispatch({ type: CONTACT_ERROR, payload: err.res.data });
+    }
+  };
   //Add contact --CRUD--
-  const addContact = contact => {
-    contact.id = uuid.v4();
-    dispatch({ type: ADD_CONTACT, payload: contact });
+  const addContact = async contact => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    try {
+      const res = await axios.post("/api/contacts", contact, config);
+      dispatch({ type: ADD_CONTACT, payload: res.data });
+    } catch (err) {
+      dispatch({ type: CONTACT_ERROR, payload: err.res.data });
+    }
   };
 
   //Delete contact
@@ -85,13 +87,15 @@ const ContactState = props => {
         contacts: state.contacts,
         current: state.current,
         filtered: state.filtered,
+        error: state.error,
         addContact,
         deleteContact,
         setCurrent,
         clearCurrent,
         updateContact,
         filterContacts,
-        clearFilter
+        clearFilter,
+        getContacts
       }}
     >
       {/* Anything we want to acess from other comoponts lik3 stat and actions go here(value) */}

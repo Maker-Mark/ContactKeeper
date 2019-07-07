@@ -8,18 +8,18 @@ const Register = props => {
   const { setAlert } = alertContext;
   const { register, error, clearErrors, isAuthenticated } = authContext;
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     props.history.push("/"); //Redirect to home
-  //   }
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push("/"); //Redirect to home
+    }
 
-  //   //Check the register error
-  //   if (error) {
-  //     setAlert(error, "danger");
-  //     clearErrors();
-  //   }
-  //   // eslint-disable-next-line
-  // }, [error, isAuthenticated, props.history]);
+    //Check the register error
+    if (error) {
+      setAlert(error, "danger");
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
 
   const [user, setUser] = useState({
     name: "",

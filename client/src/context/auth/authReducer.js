@@ -19,7 +19,9 @@ export default (state, action) => {
         loading: false,
         user: action.payload
       };
+
     case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       return {
         //Spread current state
@@ -28,6 +30,8 @@ export default (state, action) => {
         isAuthenticated: true,
         loading: false
       };
+    case LOGOUT:
+    case LOGIN_FAIL:
     case REGISTER_FAIL:
     case AUTH_ERROR:
       localStorage.removeItem("token");
@@ -39,17 +43,13 @@ export default (state, action) => {
         user: null,
         error: action.payload //This is our error message from our API!
       };
-    case LOGIN_SUCCESS:
-      return {};
-    case LOGIN_FAIL:
-      return {};
+
     case CLEAR_ERRORS:
       return {
         ...state,
         error: null
       };
-    case LOGOUT:
-      return {};
     default:
+      return state;
   }
 };

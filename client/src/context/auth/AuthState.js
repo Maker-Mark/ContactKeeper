@@ -37,7 +37,7 @@ const AuthState = props => {
     }
     try {
       //This is a private route, so we need a token
-      const res = axios.get("api/auth");
+      const res = await axios.get("api/auth");
       console.log(res.data + "HEEEEEEEEEELO");
       dispatch({
         type: USER_LOADED,
@@ -79,9 +79,35 @@ const AuthState = props => {
   };
 
   //Login user: login user, get token
-  const login = () => console.log("");
+  const login = async formData => {
+    //Set up the config header
+    const config = {
+      headers: {
+        "Content-type": "application/json"
+      }
+    };
+    //Make a req
+    try {
+      //the res comes back with a promise. We are using our proxi, so no need to specifiy full URL
+      //---> Takes in the route, data, and the config.
+      const res = await axios.post("api/auth/", formData, config); // We are hitting our API users/ POST
+      //If all goes well, dispatch
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data // This will be the token
+      });
+
+      loadUser();
+      //The catch from our API will get the details here
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data.msg //Get our error message to our state
+      });
+    }
+  };
   //Log out: Log out user, distroy toke
-  const logout = () => console.log("");
+  const logout = () => dispatch({ type: LOGOUT });
   //Clear errors
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
   //Return the provider so we can wrap our app with this context to get this state

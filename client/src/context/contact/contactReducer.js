@@ -1,11 +1,13 @@
 import {
   ADD_CONTACT,
+  GET_CONTACTS,
   DELETE_CONTACT,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_CONTACT,
   FILTER_CONTACTS,
-  CLEAR_FILTER
+  CLEAR_FILTER,
+  CONTACT_ERROR
 } from "../types";
 //Gives us dispatch
 export default (state, action) => {
@@ -20,7 +22,8 @@ export default (state, action) => {
         ...state, //If they match now that contact is equal to the patlaod, aka the updated contact.
         contacts: state.contacts.map(contact =>
           contact.id === action.payload.id ? action.payload : contact
-        )
+        ),
+        loading: false
       };
     case DELETE_CONTACT:
       return {
@@ -28,6 +31,12 @@ export default (state, action) => {
         contacts: state.contacts.filter(
           contact => contact.id !== action.payload
         )
+      };
+    case GET_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload,
+        loading: false
       };
     case SET_CURRENT:
       return {
@@ -55,6 +64,12 @@ export default (state, action) => {
       return {
         ...state,
         current: null
+      };
+
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        error: action.payload
       };
 
     default:
