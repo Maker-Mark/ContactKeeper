@@ -1,4 +1,6 @@
 {
-  "mongoURI": " mongodb+srv://contactAdmin:L9l351WYIYSU7uVN@contactkeepercluster-io8tt.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://contactAdmin:L9l351WYIYSU7uVN@contactkeepercluster-io8tt.mongodb.net/test?retryWrites=true&w=majority",
+
+  "mongoURI1": "mongodb+srv://Macbook:PNStPyzeV1uUvlUU@contactkeepercluster-io8tt.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "dirtylitte"
 }
