@@ -19,7 +19,7 @@ import {
 const ContactState = props => {
   //Hard coded contacts for testing
   const initState = {
-    contacts: [],
+    contacts: null,
     //We'll use current as a placeholder for editing contacts
     current: null,
     //An array of filtered contacts that match the filter
@@ -54,8 +54,37 @@ const ContactState = props => {
   };
 
   //Delete contact
-  const deleteContact = id => {
-    dispatch({ type: DELETE_CONTACT, payload: id });
+  const deleteContact = async id => {
+    try {
+      const res = await axios.delete(`/api/contacts/${id}`);
+      dispatch({ type: DELETE_CONTACT, payload: id });
+    } catch (err) {
+      dispatch({ type: CONTACT_ERROR, payload: err.res.data });
+    }
+  };
+
+  //Update contact
+  const updateContact = async contact => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    try {
+      const res = await axios.put(
+        `/api/contacts/${contact._id}`,
+        contact,
+        config
+      );
+      dispatch({ type: UPDATE_CONTACT, payload: res.data });
+    } catch (err) {
+      dispatch({ type: CONTACT_ERROR, payload: err.res.data });
+    }
+  };
+
+  //Clear contacts
+  const clearContacts = () => {
+    dispatch({ type: CLEAR_CONTACTS });
   };
 
   //Set current contact
@@ -66,10 +95,6 @@ const ContactState = props => {
   const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT });
   };
-  //Update contact
-  const updateContact = contact => {
-    dispatch({ type: UPDATE_CONTACT, payload: contact });
-  };
 
   //Filter contacts
   const filterContacts = text => {
@@ -79,6 +104,7 @@ const ContactState = props => {
   const clearFilter = () => {
     dispatch({ type: CLEAR_FILTER });
   };
+
   //Return the provider so we can wrap our app with this context to get this state
   return (
     //We add things here to our providor so that we can acces them whenever/wherever we bring in the contactContext
@@ -95,7 +121,8 @@ const ContactState = props => {
         updateContact,
         filterContacts,
         clearFilter,
-        getContacts
+        getContacts,
+        clearContacts
       }}
     >
       {/* Anything we want to acess from other comoponts lik3 stat and actions go here(value) */}
