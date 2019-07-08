@@ -7,7 +7,7 @@ const db1 = config.get("mongoURI1");
 // Mongoose returns promises, let's use async await and try-catch
 const connectDB = async () => {
   try {
-    await mongoose.connect(db || db1, {
+    await mongoose.connect(db, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false
