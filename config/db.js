@@ -29,8 +29,8 @@ var connectWithRetry = function() {
     useFindAndModify: false
   });
 };
-connectDB = connectWithRetry;
+// connectDB = connectWithRetry;
 
 //Until here
 
-module.exports = connectDB;
+module.exports = connectWithRetry;
