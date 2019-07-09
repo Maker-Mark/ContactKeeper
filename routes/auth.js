@@ -86,7 +86,7 @@ router.post(
       jwt.sign(
         //Sign the jwt with the payload given the secret and set it to expire.
         payload,
-        config.get("jwtSecret"),
+        config.get("jwtSecret") || process.env.JWS,
         {
           expiresIn: 46000
         }, //res.json the token as a object
