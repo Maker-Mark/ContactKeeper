@@ -6,7 +6,8 @@ Contact Keeper is a MERN (MongoDB,Express,React,NodeJS) full stack application. 
 # Signing up 
 ![enter image description here](https://i.imgur.com/Ff4pzVj.png)
 # Adding a Contact
-![Adding Contacts](https://i.imgur.com/f27QpQS.png https://i.imgur.com/pw1ZAwO.png)
+![Adding Contacts](https://i.imgur.com/f27QpQS.png)
+![Adding Contacts](https://i.imgur.com/pw1ZAwO.png)
 
 # Filter Contacts
 ![filter](https://i.imgur.com/qzLuO6N.png)
